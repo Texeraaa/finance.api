@@ -1,19 +1,57 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+model User {
+  id          Int          @id @default(autoincrement())
+  username    String       @unique
+  password    String
+  email       String       @unique
+  createdAt   DateTime     @default(now())
+  incomes     Income[]
+  investments Investment[]
+  bills       Bill[]
+  receivables Receivable[]
 }
 
-model User {
-  id        String   @id @default(uuid())
-  cpf       String   @unique
-  name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+model Income {
+  id     Int      @id @default(autoincrement())
+  user   User     @relation(fields: [userId], references: [id])
+  userId Int
+  amount Float
+  source String?
+  date   DateTime
+}
+
+model Investment {
+  id     Int      @id @default(autoincrement())
+  user   User     @relation(fields: [userId], references: [id])
+  userId Int
+  amount Float
+  type   String
+  date   DateTime
+}
+
+model Bill {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  amount      Float
+  description String?
+  dueDate     DateTime
+}
+
+model Receivable {
+  id      Int      @id @default(autoincrement())
+  user    User     @relation(fields: [userId], references: [id])
+  userId  Int
+  amount  Float
+  source  String?
+  dueDate DateTime
 }

@@ -3,6 +3,8 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateIncomeDto } from './dto/create-income.dto';
 
+export type User = any;
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -25,6 +27,7 @@ export class UsersService {
       select: {
         id: true,
         username: true,
+        password: true,
         email: true,
         createdAt: true,
       },

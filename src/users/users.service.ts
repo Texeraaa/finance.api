@@ -22,7 +22,7 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    const user = this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: id },
       select: {
         id: true,
@@ -47,6 +47,25 @@ export class UsersService {
         username: true,
         email: true,
         createdAt: true,
+      },
+    });
+  }
+
+  async remove(id: string) {
+    const user = await this.findOne(id);
+
+    await this.prisma.income.deleteMany({
+      where: { userId: user.id },
+    });
+
+    return this.prisma.user.delete({
+      where: { id: user.id },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        incomes: true,
+        cpf: true,
       },
     });
   }

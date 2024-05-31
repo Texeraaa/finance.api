@@ -1,4 +1,12 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+// create-income.dto.ts
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  IsDate,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateIncomeDto {
   @IsNumber({ maxDecimalPlaces: 2 })
@@ -6,5 +14,12 @@ export class CreateIncomeDto {
 
   @IsString({ message: 'source deve ser do tipo string' })
   @IsOptional()
-  source: string;
+  source?: string;
+
+  @IsUUID()
+  userId: string;
+
+  @IsDate({ message: 'date deve ser uma data válida' })
+  @Type(() => Date)
+  date: Date;
 }

@@ -19,7 +19,7 @@ export class AuthController {
 
   @Public()
   @HttpCode(HttpStatus.OK)
-  @Post('login')
+  @Post('sign-in')
   signIn(@Body() { cpf, password }: AuthDto) {
     return this.authService.signIn({ cpf, password });
   }

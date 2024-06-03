@@ -15,6 +15,7 @@ export class UsersService {
         id: true,
         username: true,
         email: true,
+        roles: true,
         incomes: true,
         createdAt: true,
       },
@@ -29,6 +30,7 @@ export class UsersService {
         username: true,
         password: true,
         email: true,
+        roles: true,
         createdAt: true,
       },
     });
@@ -70,9 +72,9 @@ export class UsersService {
     });
   }
 
-  async createIncome(data: CreateIncomeDto) {
+  async createIncome(userId, data: CreateIncomeDto) {
     console.log('data', data);
-    const { userId, amount, date, source } = data;
+    const { amount, date, source } = data;
     return this.prisma.user.update({
       where: { id: userId },
       data: {

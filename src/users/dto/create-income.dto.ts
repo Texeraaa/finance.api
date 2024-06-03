@@ -16,9 +16,6 @@ export class CreateIncomeDto {
   @IsOptional()
   source?: string;
 
-  @IsUUID()
-  userId: string;
-
   @IsDate({ message: 'date deve ser uma data válida' })
   @Type(() => Date)
   date: Date;

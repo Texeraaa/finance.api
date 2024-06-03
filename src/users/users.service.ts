@@ -72,7 +72,7 @@ export class UsersService {
     });
   }
 
-  async createIncome(userId, data: CreateIncomeDto) {
+  async createIncome(userId: string, data: CreateIncomeDto) {
     console.log('data', data);
     const { amount, date, source } = data;
     return this.prisma.user.update({

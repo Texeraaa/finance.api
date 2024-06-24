@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateIncomeDto } from './dto/create-income.dto';
@@ -51,6 +51,12 @@ export class UsersService {
   }
 
   async create(data: Prisma.UserCreateInput) {
+    const user = this.findOne(data.cpf)
+
+    if(user){
+      throw new BadRequestException('Usuário ja existente')
+    }
+
     return this.prisma.user.create({
       data: { ...data },
       select: {

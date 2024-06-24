@@ -51,13 +51,13 @@ export class UsersService {
   }
 
   async create(data: Prisma.UserCreateInput) {
-    const user = this.findOne(data.cpf)
+    const user = await this.findOne(data.cpf)
 
     if(user){
       throw new BadRequestException('Usuário ja existente')
     }
 
-    return this.prisma.user.create({
+    return await this.prisma.user.create({
       data: { ...data },
       select: {
         id: true,

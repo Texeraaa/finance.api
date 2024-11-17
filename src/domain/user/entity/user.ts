@@ -40,4 +40,10 @@ export class User {
         return this.props.cpf
     }
     
+    public increaseBalance(balance: number){
+        this.props.balance += balance
+    }
+    public decreaseBalance(balance: number){
+        this.props.balance -= balance
+    }
 }

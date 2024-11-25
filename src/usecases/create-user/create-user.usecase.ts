@@ -1,34 +1,45 @@
-import { User } from "../../domain/user/entity/user"
-import { UserGateway } from "../../domain/user/gateway/product.gateway"
-import { Usecase } from "../usecase"
+import { User } from "../../domain/user/entity/user";
+import { UserGateway } from "../../domain/user/gateway/product.gateway";
+import { Usecase } from "../usecase";
 
 export type CreateUserInputDto = {
-    name: string
-    cpf: string
-    password: string
-}
+  name: string;
+  cpf: string;
+  password: string;
+};
 
 export type CreateUserOutputDto = {
-    id: string
-}
+  id: string;
+};
 
+export class CreateUserUsecase
+  implements Usecase<CreateUserInputDto, CreateUserOutputDto>
+{
+  private constructor(private readonly userGateway: UserGateway) {}
 
-export class CreateUserUsecase implements Usecase<CreateUserInputDto, CreateUserOutputDto>{
-    private constructor(private readonly userGateway: UserGateway){}
+  public static create(userGateway: UserGateway) {
+    return new CreateUserUsecase(userGateway);
+  }
 
-    public static create(userGateway: UserGateway){
-        return new CreateUserUsecase(userGateway)
-    }
+  public async execute({
+    name,
+    cpf,
+    password,
+  }: CreateUserInputDto): Promise<CreateUserOutputDto> {
+    const aUser = User.create(name, cpf, password);
 
-    public async execute({name,cpf,password}: CreateUserInputDto): Promise<CreateUserOutputDto> {
-        const aUser = User.create(name,cpf,password)
-        
-        await this.userGateway.save(aUser)
+    await this.userGateway.save(aUser);
 
-        const output: CreateUserOutputDto = {
-            id: aUser.id
-        }
+    const output = this.presentOutput(aUser);
 
-        return output
-    }
+    return output;
+  }
+
+  private presentOutput(user: User): CreateUserOutputDto {
+    const output: CreateUserOutputDto = {
+      id: user.id,
+    };
+
+    return output;
+  }
 }
